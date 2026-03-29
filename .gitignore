@@ -42,3 +42,5 @@ qrcode.png
 data/
 .next
 out.DS_Store
+
+.DS_Store
