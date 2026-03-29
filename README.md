@@ -2,6 +2,113 @@
     <img src="https://image.biliup.me/2024-06-26/1719388842-365149-logo.png" width="400" alt="logo">
 </p>
 
+# 🎬 fork-biliup - B站直播录制与上传工具
+
+![Python](https://img.shields.io/badge/Python-3.8+-blue?logo=python)
+![License](https://img.shields.io/badge/License-MIT-green)
+
+## 📖 项目简介
+
+fork-biliup是B站直播录制与自动上传工具,支持多平台直播录制(B站、斗鱼、虎牙、Twitch、YouTube等),自动选择上传线路,支持弹幕录制和WebUI管理。
+
+## 📦 项目来源
+
+- **原项目**: [biliup/biliup](https://github.com/biliup/biliup)
+- **原作者**: ForgQi
+- **开源协议**: MIT License
+- **Fork时间**: 2024年
+
+## 🔧 二次开发内容
+
+本项目为原项目的学习研究版本,未进行实质性修改,主要用于:
+- 学习直播流媒体的录制原理
+- 研究多平台直播源的解析方法
+- 了解自动上传技术的实现
+
+## 系统架构 | System Architecture
+
+```mermaid
+graph TB
+    subgraph Input["📥 输入层"]
+        A[直播平台URL] --> B[配置文件]
+        C[WebUI界面] --> B
+        D[命令行参数] --> B
+    end
+    
+    subgraph Core["⚙️ 核心引擎"]
+        B --> E[平台识别模块]
+        E --> F{平台类型}
+        F -->|B站| G[Bilibili处理器]
+        F -->|斗鱼| H[Douyu处理器]
+        F -->|虎牙| I[Huya处理器]
+        F -->|Twitch| J[Twitch处理器]
+        F -->|YouTube| K[YouTube处理器]
+        G --> L[流媒体下载器]
+        H --> L
+        I --> L
+        J --> L
+        K --> L
+    end
+    
+    subgraph Download["⬇️ 下载模块"]
+        L --> M[Stream-gears]
+        L --> N[Streamlink]
+        L --> O[yt-dlp]
+        L --> P[ykdl]
+        M --> Q[防花屏处理]
+        N --> Q
+        O --> Q
+        P --> Q
+    end
+    
+    subgraph Upload["⬆️ 上传模块"]
+        Q --> R[自动选择线路]
+        R --> S[并发上传控制]
+        S --> T[哔哩哔哩投稿]
+    end
+    
+    subgraph Extra["🎯 扩展功能"]
+        U[弹幕录制] --> V[外挂播放器]
+        W[WebUI管理] --> X[远程控制]
+        Y[Docker部署] --> Z[容器化运行]
+    end
+    
+    style A fill:#e1f5ff
+    style C fill:#e1f5ff
+    style T fill:#c8e6c9
+    style Q fill:#fff9c4
+```
+
+## 数据流转流程 | Data Flow
+
+```mermaid
+sequenceDiagram
+    participant U as 用户
+    participant W as WebUI/CLI
+    participant C as 配置管理
+    participant P as 平台处理器
+    participant D as 下载器
+    participant S as 存储系统
+    participant B as B站API
+    
+    U->>W: 添加直播链接
+    W->>C: 保存配置
+    C->>P: 识别平台类型
+    P->>P: 获取直播流地址
+    P->>D: 启动下载任务
+    D->>S: 保存视频文件
+    D->>D: 防花屏处理
+    D->>S: 保存弹幕文件
+    
+    loop 定时检测
+        P->>P: 检测直播状态
+        P->>D: 直播开始/结束
+    end
+    
+    D->>B: 自动上传到B站
+    B->>U: 上传完成通知
+```
+
 <div align="center">
 
 [![python](https://img.shields.io/badge/python-3.7%2B-blue)](http://www.python.org/download)
